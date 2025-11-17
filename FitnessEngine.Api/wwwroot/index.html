@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fitness Recommendations</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Fitness Recommendations</h1>
+
+        <label for="prompt">Enter your fitness info:</label>
+        <textarea id="prompt" rows="2" placeholder="Format: Beginner, Muscle Gain, 30 min strength"></textarea>
+
+        <button id="getRecommendations">Get Recommendations</button>
+
+        <div id="loadingText" style="display:none;">Loading recommendations...</div>
+        <div id="errorText"></div>
+
+        <div id="results" style="display:none;">
+            <h2>Workouts</h2>
+            <div id="workoutsContainer"></div>
+
+            <h2>Diet Plan</h2>
+            <div id="dietContainer"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

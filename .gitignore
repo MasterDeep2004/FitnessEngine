@@ -1,0 +1,13 @@
+# Ignores generated build/publish folders
+[Dd]ebug/
+[Rr]elease/
+bin/
+obj/
+publish/
+
+# Ignores Visual Studio temporary files/folders
+# The .vs folder contains solution-wide settings and files locked by VS
+.vs/
+*.vsidx
+*.suo
+*.user
