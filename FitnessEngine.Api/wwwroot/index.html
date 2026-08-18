@@ -1,31 +1,162 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Fitness Recommendations</title>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Fitness Recommendation System</title>
+
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
     <div class="container">
-        <h1>Fitness Recommendations</h1>
 
-        <label for="prompt">Enter your fitness info:</label>
-        <textarea id="prompt" rows="2" placeholder="Format: Beginner, Muscle Gain, 30 min strength"></textarea>
+        <header>
+            <h1>AI Fitness Recommendation System</h1>
+            <p>
+                Generate personalized workout and nutrition plans
+                using AI-powered recommendations.
+            </p>
+        </header>
 
-        <button id="getRecommendations">Get Recommendations</button>
+        <section class="card">
 
-        <div id="loadingText" style="display:none;">Loading recommendations...</div>
-        <div id="errorText"></div>
+            <h2>Your Fitness Profile</h2>
 
-        <div id="results" style="display:none;">
-            <h2>Workouts</h2>
-            <div id="workoutsContainer"></div>
+            <form id="recommendationForm">
 
-            <h2>Diet Plan</h2>
-            <div id="dietContainer"></div>
-        </div>
+                <div class="form-grid">
+
+                    <div>
+                        <label>Age</label>
+
+                        <input
+                            type="number"
+                            id="age"
+                            required
+                            min="1">
+                    </div>
+
+                    <div>
+                        <label>Weight (kg)</label>
+
+                        <input
+                            type="number"
+                            id="weight"
+                            required
+                            min="1"
+                            step="0.1">
+                    </div>
+
+                    <div>
+                        <label>Goal</label>
+
+                        <select id="goal" required>
+                            <option value="">Select Goal</option>
+                            <option value="Weight Loss">
+                                Weight Loss
+                            </option>
+                            <option value="Muscle Gain">
+                                Muscle Gain
+                            </option>
+                            <option value="General Fitness">
+                                General Fitness
+                            </option>
+                            <option value="Strength">
+                                Strength
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Fitness Level</label>
+
+                        <select id="fitnessLevel" required>
+                            <option value="">
+                                Select Level
+                            </option>
+
+                            <option value="Beginner">
+                                Beginner
+                            </option>
+
+                            <option value="Intermediate">
+                                Intermediate
+                            </option>
+
+                            <option value="Advanced">
+                                Advanced
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Preferred Workout Type</label>
+
+                        <input
+                            type="text"
+                            id="preferredType"
+                            placeholder="Cardio, Strength, Yoga...">
+                    </div>
+
+                    <div>
+                        <label>Maximum Duration (minutes)</label>
+
+                        <input
+                            type="number"
+                            id="maxDuration"
+                            min="1"
+                            placeholder="60">
+                    </div>
+
+                </div>
+
+                <button type="submit">
+                    Generate Recommendation
+                </button>
+
+            </form>
+
+        </section>
+
+        <section
+            id="loading"
+            class="loading hidden">
+
+            Generating your personalized plan...
+        </section>
+
+        <section
+            id="results"
+            class="results hidden">
+
+            <div class="card">
+
+                <h2>Recommended Workouts</h2>
+
+                <div id="workouts"></div>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Nutrition Plan</h2>
+
+                <div id="diet"></div>
+
+            </div>
+
+        </section>
+
     </div>
 
-    <script src="script.js"></script>
+    <script src="app.js"></script>
+
 </body>
+
 </html>
