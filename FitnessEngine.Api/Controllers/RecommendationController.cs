@@ -1,44 +1,56 @@
-﻿using FitnessEngine.Api.Models;
+using FitnessEngine.Api.DTOs;
 using FitnessEngine.Api.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FitnessEngine.Api.Controllers
+namespace FitnessEngine.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class RecommendationController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class RecommendationController : ControllerBase
+    private readonly RecommendationService _recommendationService;
+
+    public RecommendationController(
+        RecommendationService recommendationService)
     {
-        private readonly RecommendationService _service;
-        private readonly ILogger<RecommendationController> _logger;
+        _recommendationService = recommendationService;
+    }
 
-        public RecommendationController(RecommendationService service, ILogger<RecommendationController> logger)
+    [HttpPost]
+    public async Task<ActionResult<RecommendationDto>>
+        GenerateRecommendation(
+            [FromBody] UserInputDto input)
+    {
+        if (input.Age <= 0)
+            return BadRequest("Age must be greater than zero.");
+
+        if (input.Weight <= 0)
+            return BadRequest("Weight must be greater than zero.");
+
+        if (string.IsNullOrWhiteSpace(input.Goal))
+            return BadRequest("Goal is required.");
+
+        if (string.IsNullOrWhiteSpace(input.FitnessLevel))
+            return BadRequest("Fitness level is required.");
+
+        try
         {
-            _service = service;
-            _logger = logger;
+            var recommendation =
+                await _recommendationService
+                    .GenerateRecommendationAsync(input);
+
+            return Ok(recommendation);
         }
-
-        [HttpPost("llm")]
-        public async Task<IActionResult> GetLLMRecommendations([FromBody] UserInput input)
+        catch (Exception ex)
         {
-            if (!ModelState.IsValid)
-                return BadRequest("Invalid input");
-
-            try
-            {
-                // Call service with only UserInput
-                var result = await _service.GetPersonalizedRecommendationsAsync(input);
-
-                return Ok(new
+            return StatusCode(
+                500,
+                new
                 {
-                    Workouts = result.Workouts,
-                    DietPlan = result.DietPlan
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error fetching LLM recommendations");
-                return StatusCode(500, new { Message = ex.Message });
-            }
+                    message = "Failed to generate recommendation.",
+                    error = ex.Message
+                }
+            );
         }
     }
 }
