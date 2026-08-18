@@ -1,26 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+namespace FitnessEngine.Api.Models;
 
-namespace FitnessEngine.Api.Models
+public class Workout
 {
-    public class Workout
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Goal { get; set; }
+    public int Id { get; set; }
 
-        [Column("Level")]
-        public string FitnessLevel { get; set; }
+    public string Name { get; set; } = string.Empty;
 
-        public int DurationMinutes { get; set; }
-        public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
-        [NotMapped]
-        public int Difficulty => FitnessLevel switch
-        {
-            "Beginner" => 3,
-            "Intermediate" => 6,
-            "Advanced" => 9,
-            _ => 3
-        };
-    }
+    public string FitnessLevel { get; set; } = string.Empty;
+
+    public int DurationMinutes { get; set; }
+
+    public string Goal { get; set; } = string.Empty;
+
+    public string? Type { get; set; }
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }
