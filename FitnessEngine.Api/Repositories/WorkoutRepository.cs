@@ -1,23 +1,51 @@
-﻿using Microsoft.EntityFrameworkCore;
+using FitnessEngine.Api.Data;
 using FitnessEngine.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace FitnessEngine.Api.Repositories
+namespace FitnessEngine.Api.Repositories;
+
+public class WorkoutRepository
 {
-    public class WorkoutRepository
+    private readonly FitnessDbContext _context;
+
+    public WorkoutRepository(FitnessDbContext context)
     {
-        private readonly FitnessDbContext _context;
+        _context = context;
+    }
 
-        public WorkoutRepository(FitnessDbContext context) => _context = context;
+    public async Task<List<Workout>> GetAllAsync()
+    {
+        return await _context.Workouts
+            .AsNoTracking()
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+    }
 
-        public async Task<List<Workout>> GetWorkoutsAsync(string goal = null, string fitnessLevel = null)
-        {
-            var query = _context.Workouts.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(goal)) query = query.Where(w => w.Goal == goal);
-            if (!string.IsNullOrWhiteSpace(fitnessLevel)) query = query.Where(w => w.FitnessLevel == fitnessLevel);
-            return await query.ToListAsync();
-        }
+    public async Task<Workout?> GetByIdAsync(int id)
+    {
+        return await _context.Workouts
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
 
-        public async Task<Workout?> GetWorkoutByIdAsync(int id)
-            => await _context.Workouts.FirstOrDefaultAsync(w => w.Id == id);
+    public async Task<Workout> CreateAsync(Workout workout)
+    {
+        _context.Workouts.Add(workout);
+        await _context.SaveChangesAsync();
+
+        return workout;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var workout = await _context.Workouts.FindAsync(id);
+
+        if (workout == null)
+            return false;
+
+        _context.Workouts.Remove(workout);
+        await _context.SaveChangesAsync();
+
+        return true;
     }
 }
